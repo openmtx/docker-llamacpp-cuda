@@ -2,25 +2,23 @@
 FROM nvidia/cuda:12.6.0-devel-ubuntu24.04 AS builder
 
 RUN apt-get update && apt-get install -y \
-    git cmake build-essential libcurl4-openssl-dev libssl-dev pkg-config \
+    cmake build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /app
+# Copy local llama.cpp submodule instead of cloning from GitHub
+COPY ./llama.cpp /app
 
-# Use 'master' for the latest Qwen3.5 support
-ARG LLAMA_CPP_VERSION=master
-RUN git clone https://github.com/ggml-org/llama.cpp.git . && \
-    git checkout ${LLAMA_CPP_VERSION}
+WORKDIR /app
 
 # Build with modern GGML_CUDA flags
 # Quadro P5000 is Pascal architecture (6.1)
 RUN cmake -B build \
     -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_CXX_FLAGS_RELEASE="-O1 -DNDEBUG" \
+    -DCMAKE_CXX_FLAGS_RELEASE="-O -DNDEBUG" \
     -DGGML_CUDA=ON \
-    -DGGML_CURL=ON \
     -DGGML_CUDA_FA_ALL_QUANTS=ON \
-    -DCMAKE_CUDA_ARCHITECTURES=61 \
+    -DGGML_CUDA_FORCE_MMQ=ON \
+    -DCMAKE_CUDA_ARCHITECTURES="61;75;86;89;90" \
     -DCMAKE_EXE_LINKER_FLAGS="-L/usr/local/cuda/lib64/stubs -lcuda" \
     -DCMAKE_SHARED_LINKER_FLAGS="-L/usr/local/cuda/lib64/stubs -lcuda" \
     && cmake --build build --config Release -j $(nproc)
