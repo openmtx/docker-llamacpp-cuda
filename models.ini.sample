@@ -3,7 +3,32 @@
 # Other sections remain as aliases for on-demand use / record-keeping.
 
 [qwen3.6-27b]
-model = /models/Qwen3.6-27B-Q4_K_M.gguf
+model = /models/Qwen3.6-27B-UD-Q4_K_XL.gguf
+parallel = 1
+ctx-size = 196608
+flash-attn = on
+timeout = 1200
+main-gpu = 0
+tensor-split = 50,50
+cache-type-k = q8_0
+cache-type-v = q8_0
+n-gpu-layers = 99
+spec-type = draft-mtp
+spec-draft-n-max = 2
+jinja = on
+reasoning-preserve = on
+no-prefill-assistant = true
+reasoning = off
+load-on-startup = false
+temp = 0.6
+top-p = 0.9
+min-p = 0.05
+repeat-penalty = 1.05
+presence-penalty = 0.1
+seed = 3407
+
+[qwen3.6-35b-a3b]
+model = /models/Qwen3.6-35B-A3B-UD-Q4_K_XL.gguf
 parallel = 1
 ctx-size = 131072
 flash-attn = on
@@ -19,7 +44,7 @@ jinja = on
 reasoning-preserve = on
 no-prefill-assistant = true
 reasoning = off
-load-on-startup = true
+load-on-startup = false
 temp = 0.6
 top-p = 0.9
 min-p = 0.05

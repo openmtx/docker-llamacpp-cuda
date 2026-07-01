@@ -51,7 +51,11 @@ docker compose run --rm server \
 
 ## Configuration
 
-Edit `models.ini` to manage model presets with per-model settings for GPU layers, tensor split, context size, KV cache quantization, speculative decoding, and sampling parameters.
+Copy `models.ini.sample` to `models.ini` and edit it to manage model presets with per-model settings for GPU layers, tensor split, context size, KV cache quantization, speculative decoding, and sampling parameters.
+
+```bash
+cp models.ini.sample models.ini
+```
 
 ## Tests
 
