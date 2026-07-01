@@ -32,13 +32,22 @@ cache-type-v = q8_0
 
 Common options: `f16` (default), `q8_0`, `q4_0`, `q4_1`. Using lower precision (e.g. `q8_0` or `q4_0`) reduces VRAM usage with minimal quality loss. K and V can be set to different types.
 
+## Image Tags
+
+Images are tagged with the corresponding llama.cpp release tag (e.g. `b9851`).
+When the `llama.cpp` submodule is updated, bump the tag in `docker-compose.yml` to match.
+
+```bash
+cd llama.cpp && git describe --tags --abbrev=0
+```
+
 ## Quick Start
 
 ```bash
-# Build
-docker compose build
+# Pull the pre-built image
+docker compose pull
 
-# Run with model preset (see models.ini)
+# Run with model preset (see models.ini.sample)
 docker compose up -d
 
 # Or with custom flags

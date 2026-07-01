@@ -1,6 +1,6 @@
 services:
   server:
-    image: ghcr.io/openmtx/llamacpp-cuda:latest
+    image: ghcr.io/openmtx/llamacpp-cuda:b9851
     ports:
       - "8000:8000"
     volumes:
