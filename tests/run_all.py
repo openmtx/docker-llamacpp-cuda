@@ -13,6 +13,7 @@ SUITES = [
     "test_reasoning",
     "test_world_knowledge",
     "test_hallucination",
+    "test_vision",
 ]
 
 
