@@ -1,9 +1,6 @@
 services:
   server:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: openmtx/llamacpp-cuda:latest
+    image: ghcr.io/openmtx/llamacpp-cuda:latest
     ports:
       - "8000:8000"
     volumes:
