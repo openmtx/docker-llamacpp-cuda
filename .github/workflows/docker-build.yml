@@ -22,7 +22,19 @@ jobs:
 
       - name: Extract llama.cpp release tag
         run: |
-          TAG=$(cd llama.cpp && git describe --tags --abbrev=0)
+          set -e
+          # The submodule is checked out shallowly (no tags), so we can't use
+          # `git describe`. Instead, look up which tag points at the pinned commit
+          # via ref advertisement only (no object fetch).
+          SUB_HEAD=$(git -C llama.cpp rev-parse HEAD)
+          TAG=$(git -C llama.cpp ls-remote --tags origin \
+                | grep -F "$SUB_HEAD" \
+                | sed -e 's#.*refs/tags/##' -e 's#\^{}$##' \
+                | sort -u | head -n1)
+          if [ -z "$TAG" ]; then
+            echo "::error::No llama.cpp tag found for submodule commit $SUB_HEAD"
+            exit 1
+          fi
           echo "TAG=$TAG" >> $GITHUB_ENV
           echo "Using llama.cpp tag: $TAG"
 
