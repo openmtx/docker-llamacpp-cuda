@@ -1,5 +1,8 @@
 # llama.cpp CUDA Docker
 
+[![CI](https://github.com/openmtx/docker-llamacpp-cuda/actions/workflows/docker-build.yml/badge.svg?branch=dev)](https://github.com/openmtx/docker-llamacpp-cuda/actions/workflows/docker-build.yml)
+![ghcr](https://img.shields.io/badge/ghcr-openmtx%2Fllamacpp--cuda-blue)
+
 Run [llama.cpp](https://github.com/ggerganov/llama.cpp)'s `llama-server` on an NVIDIA GPU
 using a prebuilt, multi-architecture CUDA image. The default branch (`master`) is the
 **run** branch — it has everything you need to serve a model; you only need to add a model
