@@ -2,7 +2,7 @@ name: Build and Push Container
 
 on:
   push:
-    branches: [master]
+    branches: [dev]
   workflow_dispatch:
 
 env:
