@@ -42,5 +42,5 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}:${{ env.TAG }}
-            ghcr.io/${{ github.repository }}:latest
+            ghcr.io/openmtx/llamacpp-cuda:${{ env.TAG }}
+            ghcr.io/openmtx/llamacpp-cuda:latest
