@@ -44,7 +44,6 @@ ENV PATH="/app/bin:${PATH}"
 ENV LD_LIBRARY_PATH="/app/bin:${LD_LIBRARY_PATH}"
 
 USER ubuntu
-EXPOSE 8080
 VOLUME /models
 
 # Entrypoint
