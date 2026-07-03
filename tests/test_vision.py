@@ -40,7 +40,7 @@ def test_vision(chat_url, headers, model, timeout, verbose=False):
             ]
             resp, _, dt, usage = chat(chat_url, headers, model,
                                        messages, temperature=0.0,
-                                       max_tokens=512, timeout=timeout)
+                                       max_tokens=8192, timeout=timeout)
         except Exception as e:
             print(f"ERROR: {e}")
             log_result(cid, False, str(e))

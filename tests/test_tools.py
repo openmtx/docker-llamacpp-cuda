@@ -75,7 +75,7 @@ def test_basic_tool(chat_url, headers, model, timeout, tools, prompt,
     resp, calls, dt, usage = chat(chat_url, headers, model,
                                   [{"role": "user", "content": prompt}],
                                   tools=tools, temperature=0.0,
-                                  max_tokens=200, timeout=timeout)
+                                  max_tokens=8192, timeout=timeout)
     if calls and calls[0].get("function", {}).get("name") == expected_name:
         args = calls[0].get("function", {}).get("arguments", "")
         return True, f"called {expected_name}: {str(args)[:80]}"
@@ -104,7 +104,7 @@ def test_tool_chain(chat_url, headers, model, timeout):
     ]
     try:
         resp, calls, dt, _ = chat(chat_url, headers, model, messages,
-                                   max_tokens=200, timeout=timeout)
+                                   max_tokens=8192, timeout=timeout)
     except Exception as e:
         log_result("tool_chain", False, str(e))
         print(f"  FAIL: {e}")
@@ -140,7 +140,7 @@ def test_parallel(chat_url, headers, model, timeout):
         resp, calls, dt, _ = chat(chat_url, headers, model,
                                   [{"role": "user", "content": prompt}],
                                   tools=tools, temperature=0.0,
-                                  max_tokens=200, timeout=timeout)
+                                  max_tokens=8192, timeout=timeout)
     except Exception as e:
         log_result("parallel_tools", False, str(e))
         print(f"  FAIL: {e}")
@@ -159,7 +159,7 @@ def test_complex_args(chat_url, headers, model, timeout):
         resp, calls, dt, _ = chat(
             chat_url, headers, model,
             [{"role": "user", "content": prompt}],
-            tools=[FLIGHT_TOOL], temperature=0.0, max_tokens=200,
+            tools=[FLIGHT_TOOL], temperature=0.0, max_tokens=8192,
             timeout=timeout)
     except Exception as e:
         log_result("complex_args", False, str(e))

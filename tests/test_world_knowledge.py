@@ -9,8 +9,9 @@ from utils import RESULTS, chat, log_result, print_summary, reset_results
 QUESTIONS = [
     # Obscure history
     ("H1-cymon",
-     "What was the name of the pirate ship that served as the flagship of "
-     "the Welsh pirate Bartholomew Roberts (Black Bart)? Answer with just the ship name.",
+     "What was the name of the final flagship of the Welsh pirate "
+     "Bartholomew Roberts (Black Bart) — the ship he commanded when he was "
+     "killed in battle in 1722? Answer with just the ship name.",
      ["royal fortune", "ranger"],
      ["queen anne"]),
     ("H2-muskets",
@@ -33,8 +34,9 @@ QUESTIONS = [
      ["lonsdaleite", "wurtzite boron nitride",
       "boron nitride"]),
     ("S2-moth",
-     "What is the name of the moth species that was once the most abundant "
-     "insect in North America but is now virtually extinct? Just the species.",
+     "What is the name of the insect species that was once the most abundant "
+     "in North America but is now virtually extinct? Just the common or "
+     "scientific species name.",
      ["rocky mountain locust",
       "melanoplus spretus"]),
     ("S3-volcano",
@@ -66,8 +68,8 @@ QUESTIONS = [
      "Just the name.",
      ["ruby"]),
     ("P3-game",
-     "What was the first video game to feature a 'save' system? "
-     "Just the game name.",
+     "What was the first home console video game to use a battery-backed "
+     "save system, letting players keep their progress? Just the game name.",
      ["the legend of zelda",
       "zelda"]),
 ]
@@ -92,7 +94,7 @@ def test_world_knowledge(chat_url, headers, model, timeout, verbose=False):
         try:
             resp, _, dt, usage = chat(chat_url, headers, model,
                                       [{"role": "user", "content": prompt}],
-                                      temperature=0.0, max_tokens=100,
+                                      temperature=0.0, max_tokens=8192,
                                       timeout=timeout)
         except Exception as e:
             print(f"ERROR: {e}")

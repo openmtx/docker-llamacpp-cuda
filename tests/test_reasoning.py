@@ -39,14 +39,26 @@ REASONING_CASES = [
      "rounded to nearest cent (e.g. 6.80).",
      ["6.80", "6.8", "$6.80"], ["6.30", "6.3"]),
     ("R7-syllogism",
-     "All Blorps are Glarps. Some Glarps are Flumphs. Can we logically "
-     "conclude some Blorps are Flumphs? Answer: Yes, No, or Uncertain.",
+     "All Blorps are Glarps. Some Glarps are Flumphs. Based only on these "
+     "two premises, must it be true that some Blorps are Flumphs? Answer "
+     "with one word: Yes (it must be true), No (it must be false), or "
+     "Uncertain (it could be either true or false).",
      ["uncertain"], ["yes"]),
 ]
 
 
+_LATEX_FRACTION = re.compile(r'\\[dtc]?frac\s*\{([^{}]*)\}\s*\{([^{}]*)\}')
+_ANGLE_BRACKET_WRAP = re.compile(r'<([^<>{}]+)>')
+
+
+def _normalize_answer(text):
+    text = _LATEX_FRACTION.sub(lambda m: f"{m.group(1)}/{m.group(2)}", text)
+    text = _ANGLE_BRACKET_WRAP.sub(r'\1', text)
+    return text
+
+
 def grade_reasoning(response, accept, reject):
-    low = response.lower()
+    low = _normalize_answer(response).lower()
     for r in reject:
         if r.lower() in low:
             if not any(a.lower() in low for a in accept):
@@ -64,7 +76,7 @@ def test_reasoning(chat_url, headers, model, timeout, verbose=False):
         try:
             resp, _, dt, usage = chat(chat_url, headers, model,
                                       [{"role": "user", "content": prompt}],
-                                      temperature=0.0, max_tokens=1024,
+                                      temperature=0.0, max_tokens=8192,
                                       timeout=timeout)
         except Exception as e:
             print(f"ERROR: {e}")
@@ -146,7 +158,7 @@ def test_instruction(chat_url, headers, model, timeout, verbose=False):
         try:
             resp, _, dt, usage = chat(chat_url, headers, model,
                                       [{"role": "user", "content": prompt}],
-                                      temperature=0.0, max_tokens=512,
+                                      temperature=0.0, max_tokens=8192,
                                       timeout=timeout)
         except Exception as e:
             print(f"ERROR: {e}")
@@ -205,7 +217,7 @@ def test_refusal_benign(chat_url, headers, model, timeout, verbose=False):
         try:
             resp, _, dt, _ = chat(chat_url, headers, model,
                                   [{"role": "user", "content": prompt}],
-                                  temperature=0.0, max_tokens=600,
+                                  temperature=0.0, max_tokens=8192,
                                   timeout=timeout)
         except Exception as e:
             print(f"ERROR: {e}")
@@ -232,7 +244,7 @@ def test_refusal_harmful(chat_url, headers, model, timeout, verbose=False):
         try:
             resp, _, dt, _ = chat(chat_url, headers, model,
                                   [{"role": "user", "content": prompt}],
-                                  temperature=0.0, max_tokens=600,
+                                  temperature=0.0, max_tokens=8192,
                                   timeout=timeout)
         except Exception as e:
             print(f"ERROR: {e}")

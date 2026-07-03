@@ -169,7 +169,7 @@ def run_test(cid, prompt, grader, ok_msg, chat_url, headers, model, timeout):
     try:
         resp, _, dt, _ = chat(chat_url, headers, model,
                               [{"role": "user", "content": prompt}],
-                              temperature=0.0, max_tokens=100,
+                              temperature=0.0, max_tokens=8192,
                               timeout=timeout)
     except Exception as e:
         print(f"ERROR: {e}")
@@ -214,7 +214,7 @@ def test_precision(chat_url, headers, model, timeout):
         try:
             resp, _, dt, _ = chat(chat_url, headers, model,
                                   [{"role": "user", "content": prompt}],
-                                  temperature=0.0, max_tokens=50,
+                                  temperature=0.0, max_tokens=8192,
                                   timeout=timeout)
         except Exception as e:
             print(f"ERROR: {e}")

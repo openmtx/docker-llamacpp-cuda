@@ -41,7 +41,7 @@ def print_summary():
     return p == t
 
 
-def chat(chat_url, headers, model, messages, temperature=0.0, max_tokens=1024,
+def chat(chat_url, headers, model, messages, temperature=0.0, max_tokens=8192,
          tools=None, timeout=600):
     payload = {
         "model": model,

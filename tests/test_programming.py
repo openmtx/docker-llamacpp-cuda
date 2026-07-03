@@ -63,7 +63,7 @@ def test_coding_eval(chat_url, headers, model, timeout, verbose=False):
         try:
             resp, _, _, _ = chat(chat_url, headers, model,
                                  [{"role": "user", "content": prompt}],
-                                 temperature=0.0, max_tokens=1536,
+                                 temperature=0.0, max_tokens=8192,
                                  timeout=timeout)
         except Exception as e:
             print(f"REQUEST ERROR: {e}")
@@ -97,7 +97,7 @@ def test_code_generation(chat_url, headers, model, timeout, verbose=False):
         try:
             resp, _, _, _ = chat(chat_url, headers, model,
                                  [{"role": "user", "content": task}],
-                                 temperature=0.0, max_tokens=800,
+                                 temperature=0.0, max_tokens=8192,
                                  timeout=timeout)
         except Exception as e:
             print(f"ERROR: {e}")
@@ -152,9 +152,10 @@ def test_bug_fixing(chat_url, headers, model, timeout, verbose=False):
         try:
             resp, _, _, _ = chat(chat_url, headers, model,
                                  [{"role": "user",
-                                   "content": f"{prompt}\nWhat's wrong and "
-                                              "how to fix it?"}],
-                                 temperature=0.0, max_tokens=800,
+                                   "content": f"{prompt}\nExplain what's wrong, "
+                                              "then show the fully corrected "
+                                              "code in a fenced code block."}],
+                                 temperature=0.0, max_tokens=8192,
                                  timeout=timeout)
         except Exception as e:
             print(f"ERROR: {e}")

@@ -102,7 +102,7 @@ Reviewed by: Systems Team
                     {"role": "user",
                      "content": f"LOGS:\n{full}\n\nWhat is the secret code?"},
                 ],
-                temperature=0.0, max_tokens=200, timeout=timeout,
+                temperature=0.0, max_tokens=8192, timeout=timeout,
             )
         except Exception as e:
             print(f"FAIL: {e}")
