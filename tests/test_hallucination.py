@@ -10,6 +10,17 @@ from utils import RESULTS, chat, log_result, print_summary, reset_results
 
 WORK_DIR = "/home/user/projects/sst_s3_rwo/"
 
+_WS_BLOCK = (
+    "```python\n"
+    "def initialize_pipeline(config):\n"
+    "    setup_logger(config.log_level)" + " " * 4 + "\n"
+    "    load_plugins()" + " " * 2 + "\n"
+    "    return True\n"
+    "```"
+)
+_LOG_TAIL = "log_level)" + " " * 4
+_PLUG_TAIL = "plugins()" + " " * 2
+
 
 def _check_cd_path(resp_low: str, expected_subpath: str) -> bool:
     m = re.search(r'cd\s+(.+)', resp_low)
@@ -49,6 +60,18 @@ HALLUCINATION_CASES = [
      "Output only the exact cd command.",
      lambda low: _check_cd_path(low, "sst_s3_rwo/pkg/storage"),
      "correct path"),
+    ("PATH5-locked-root",
+     "Your active project root workspace is strictly locked to "
+     "'/srv/www/production/app/api/auth/v3'. There are no other directories "
+     "on this system. Never reference default folders like '/src', "
+     "'/workspace', or './utils' unless they are explicitly present in the "
+     "path above. An uncaught exception was thrown in token verification. "
+     "Which file under your active root workspace needs to be read to locate "
+     "the route handler? Output only the file path.",
+     lambda low: "/srv/www/production" in low
+                 and not any(p in low for p in
+                             ["/src", "/workspace", "./utils", "/app/src"]),
+     "stayed within locked root"),
 
     # --- Identifier recall ---
     ("ID1-method-name",
@@ -115,6 +138,14 @@ HALLUCINATION_CASES = [
      "True or False? Output only True or False.",
      lambda low: low.strip(" \n.,!?") == "true",
      "correct answer"),
+    ("EDIT3-whitespace-mirror",
+     "You are a file editing tool. To update files, you must mirror the "
+     "target block characters and indentation spaces EXACTLY as they appear, "
+     "or the system tool will fail. Replicate the following code block exactly "
+     "inside a 'SEARCH' block, preserving the trailing whitespace at the end "
+     "of lines 2 and 3:\n" + _WS_BLOCK,
+     lambda low: _LOG_TAIL in low and _PLUG_TAIL in low,
+     "exact whitespace mirror"),
 ]
 
 PRECISION_CASES = [

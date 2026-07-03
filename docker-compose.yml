@@ -6,7 +6,6 @@ services:
     volumes:
       - $HOME/.cache/llm/models:/models
       - ./models.ini:/models.ini:ro
-    shm_size: '2gb'
     ulimits:
       memlock:
         soft: -1
