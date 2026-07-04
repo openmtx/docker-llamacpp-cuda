@@ -60,11 +60,12 @@ def test_vision(chat_url, headers, model, timeout, verbose=False):
 
 def main(args=None):
     ap = build_args("Vision test suite")
-    a = ap.parse_args(args)
-    chat_url, _, headers, model, timeout = resolve(a)
-    print(f"Server: {a.host}:{a.port}  |  Model: {model}\n")
+    if args is None:
+        args = ap.parse_args()
+    chat_url, _, headers, model, timeout = resolve(args)
+    print(f"Server: {args.host}:{args.port}  |  Model: {model}\n")
     reset_results()
-    test_vision(chat_url, headers, model, timeout, verbose=a.verbose)
+    test_vision(chat_url, headers, model, timeout, verbose=args.verbose)
     ok = print_summary()
     sys.exit(0 if ok else 1)
 
