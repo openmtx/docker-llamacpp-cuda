@@ -29,11 +29,17 @@ def main():
                     help="print full responses for failures")
     ap.add_argument("--only", default=None,
                     help="run only this suite (e.g. test_speed)")
+    ap.add_argument("--exclude", action="append", default=[],
+                    help="exclude this suite (can repeat, e.g. test_speed)")
     ap.add_argument("--list", action="store_true",
                     help="list available suites")
     args = ap.parse_args()
 
-    suites = [args.only] if args.only else SUITES
+    if args.only:
+        suites = [args.only]
+    else:
+        excluded = set(args.exclude or [])
+        suites = [s for s in SUITES if s not in excluded]
     if args.list:
         print("Available suites:")
         for s in SUITES:
