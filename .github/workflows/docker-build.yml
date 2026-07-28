@@ -32,8 +32,11 @@ jobs:
                 | sed -e 's#.*refs/tags/##' -e 's#\^{}$##' \
                 | sort -u | head -n1)
           if [ -z "$TAG" ]; then
-            echo "::error::No llama.cpp tag found for submodule commit $SUB_HEAD"
-            exit 1
+            # No official release tag yet — fall back to short commit hash.
+            # This can happen after a merge but before a release is cut.
+            SHORT_HASH=$(echo "$SUB_HEAD" | cut -c1-8)
+            TAG="dev-$SHORT_HASH"
+            echo "No llama.cpp release tag found for $SUB_HEAD, using fallback: $TAG"
           fi
           echo "TAG=$TAG" >> $GITHUB_ENV
           echo "Using llama.cpp tag: $TAG"
