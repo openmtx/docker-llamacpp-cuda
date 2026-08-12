@@ -15,6 +15,11 @@ WORKDIR /app
 RUN cmake -B build \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_CXX_FLAGS_RELEASE="-O -DNDEBUG" \
+    # GGML_NATIVE=OFF avoids -march=native from the build machine, which bakes
+    # AVX512-VBMI (vpermt2b) into ggml_cpu_init and SIGILLs on pre-Ice-Lake CPUs
+    # (e.g. Cascade Lake Xeon W-2235). With it OFF, ggml enables SSE4.2/AVX/AVX2/
+    # FMA/F16C/BMI2 by default and keeps all AVX512* off.
+    -DGGML_NATIVE=OFF \
     -DGGML_CUDA=ON \
     -DGGML_CUDA_FA_ALL_QUANTS=ON \
     -DGGML_CUDA_FORCE_MMQ=ON \
